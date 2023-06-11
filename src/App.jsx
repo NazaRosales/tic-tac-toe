@@ -96,6 +96,7 @@ function App() {
       {
         winner !== null && (
           <section className="winner">
+            <div className="text">
               <h2>
                 {
                   winner === false ? 'Empate' : 'Ganador:'
