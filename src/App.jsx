@@ -83,6 +83,7 @@ function App() {
         <Squear isSelected={turn === TURN.O}>{TURN.O}</Squear>
       </section>
       }
+      
     </main>
   );
 }
