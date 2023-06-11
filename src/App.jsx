@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./App.css";
+import confetti from "canvas-confetti";
 
 const TURN = {
   X: "x",
@@ -47,6 +48,10 @@ function App() {
     return null;
   };
 
+  const checkEndGame = (newBoard) => {
+    return newBoard.every(squear => squear !== null)
+  }
+
   const updateBoard = (index) => {
     if (board[index] || winner) return;
     const newBoard = [...board];
@@ -59,12 +64,21 @@ function App() {
     const newWinner = checkWinner(newBoard)
     if(newWinner){
       setWinner(newWinner)
+      confetti();
+    } else if(checkEndGame(newBoard)){
+      setWinner(false)
     }
   };
+  const resetGame = () => {
+    setBoard(Array(9).fill(null));
+    setTurn(TURN.X);
+    setWinner(null)
+  }
 
   return (
     <main className="board">
       <h1>Tic Tac Toe!</h1>
+      {!winner && <button onClick={resetGame}>Reiniciar</button>}
       <section className="game">
         {board.map((cell, index) => {
           return (
@@ -74,16 +88,32 @@ function App() {
           );
         })}
       </section>
-        {winner && <h2>¡El ganador es: {winner}!</h2>}
-      {
-        !winner &&
-        <section className="turn">
+       
+      <section className="turn">
         <Squear isSelected={turn === TURN.X}>{TURN.X}</Squear>
-
         <Squear isSelected={turn === TURN.O}>{TURN.O}</Squear>
       </section>
+      {
+        winner !== null && (
+          <section className="winner">
+              <h2>
+                {
+                  winner === false ? 'Empate' : 'Ganador:'
+                }
+              </h2>
+
+              <header className="win">
+                {winner && <Squear>{winner}</Squear>}
+              </header>
+
+              <footer>
+                <button onClick={resetGame}>Reiniciar</button>
+              </footer>
+            </div>
+          </section>
+        )
       }
-      
+
     </main>
   );
 }
