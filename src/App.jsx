@@ -1,33 +1,60 @@
+import { useState } from 'react'
 import './App.css'
 
 const TURN = {
-  x: 'x',
-  o: 'o'
+  X: 'x',
+  O: 'o'
 }
-const BOARD = Array(9).fill(null);
 
-const Squear = ({children, updateBoard, index}) =>{
+const Squear = ({children, isSelected, updateBoard, index}) =>{
+  const className = `square ${isSelected? 'is-selected' : ''}`
+  const handleClick = () => {
+    updateBoard();
+  }
   return (
-    <div className='square'>
+    <div onClick={handleClick} className = {className}>
       {children}
     </div>
   )
 } 
 function App() {
+  const [board, setBoard] = useState(Array(9).fill(null)); 
+  const [turn, setTurn] = useState(TURN.X)
 
+
+  const updateBoard = () =>{
+    const newTurn = turn === TURN.X ? TURN.O : TURN.X; 
+    setTurn(newTurn);
+  }
+  
   return (
     <main className='board'>
-      <h1>hello word!</h1>
+      <h1>Tic Tac Toe!</h1>
       <section className='game'>
         {
-          BOARD.map( (cell, index)=>{
+          board.map( (cell, index)=>{
             return(
-              <Squear key={index} index={index}>
-                {index}
+              <Squear 
+              key={index}
+              index={index} 
+              updateBoard={updateBoard}>
+                {board[index]}
               </Squear>
             )
           })
         }
+      </section>
+
+      <section className='turn'>
+
+        <Squear isSelected = {turn === TURN.X}>
+          {TURN.X}
+        </Squear>
+
+        <Squear isSelected = {turn === TURN.O}>
+          {TURN.O}
+        </Squear>
+
       </section>
     </main>
   )
