@@ -7,9 +7,24 @@ import { Squear } from "./components/Squear";
 import { TURN } from "./constants.js";
 
 function App() {
-  const [board, setBoard] = useState(Array(9).fill(null));
-  const [turn, setTurn] = useState(TURN.X);
+  const boardFromLocalStorage = () => {
+    const storeBoard = localStorage.getItem("board");
+    return storeBoard ? JSON.parse(storeBoard) : Array(9).fill(null);
+  };
+  const turnFromLocalStorage = () => {
+    const storeTurn = localStorage.getItem("turn");
+    return storeTurn || TURN.X;
+  };
+  const [board, setBoard] = useState(boardFromLocalStorage());
+  const [turn, setTurn] = useState(turnFromLocalStorage());
   const [winner, setWinner] = useState(null);
+
+  const boardToLocalStorage = (newBoard) => {
+    localStorage.setItem("board", JSON.stringify(newBoard));
+  };
+  const turnToLocalStorage = (newTurn) => {
+    localStorage.setItem("turn", newTurn);
+  };
 
   const updateBoard = (index) => {
     if (board[index] || winner) return;
@@ -27,11 +42,16 @@ function App() {
     } else if (checkEndGame(newBoard)) {
       setWinner(false);
     }
+
+    boardToLocalStorage(newBoard);
+    turnToLocalStorage(newTurn);
   };
   const resetGame = () => {
     setBoard(Array(9).fill(null));
     setTurn(TURN.X);
     setWinner(null);
+    localStorage.removeItem("board");
+    localStorage.removeItem("turn");
   };
 
   return (
