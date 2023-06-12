@@ -37,7 +37,7 @@ function App() {
   return (
     <main className="board">
       <h1>Tic Tac Toe!</h1>
-      {!winner && <button onClick={resetGame}>Reiniciar</button>}
+      {!winner && <button onClick={resetGame}>Reset</button>}
       <section className="game">
         {board.map((cell, index) => {
           return (
